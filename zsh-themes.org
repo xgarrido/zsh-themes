@@ -54,3 +54,9 @@ about org-mode is the code wrapping that *must* be done using proper code blocks
 calls (see [[http://orgmode.org/manual/Structure-of-code-blocks.html#Structure-of-code-blocks][org babel documentation]]). Nevertheless, it is recommended to have a
 look on org-mode features especially folding/unfolding abilities which make the
 read and the navigation pretty easy.
+
+* Themes
+There is only one theme defined and set to work within different machine
+environment:
+
+- [[file:zsh-themes-nemo.org][nemo]] theme
