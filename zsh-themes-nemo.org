@@ -9,10 +9,6 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   ZSH_THEME_NEMO_USE_POWERLINE=0
 
-  # if [ ${SNAILWARE_SETUP_DONE} == 1 ]; then
-  #     ZSH_THEME_NEMO_SETUP="snailware/${SNAILWARE_SOFTWARE_VERSION}@"
-  # fi
-
   ZSH_THEME_GIT_PROMPT_PREFIX="git:("
   ZSH_THEME_GIT_PROMPT_SUFFIX=""
   ZSH_THEME_GIT_PROMPT_DIRTY=") ✘ "
@@ -51,19 +47,24 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __laptop_scheme ()
   {
-    ZSH_THEME_NEMO_USE_POWERLINE=1
-    ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
-    ZSH_THEME_NEMO_TIME=$fg[red]
+      ZSH_THEME_NEMO_USE_POWERLINE=1
+      ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
+      ZSH_THEME_NEMO_TIME=$fg[red]
 
-    POWERLINE_COLOR_BG_GRAY1=$BG[237]
-    POWERLINE_COLOR_BG_GRAY2=$BG[245]
-    POWERLINE_COLOR_BG_GRAY3=
-
-    POWERLINE_COLOR_FG_GRAY1=$FG[237]
-    POWERLINE_COLOR_FG_GRAY2=$FG[245]
-    POWERLINE_COLOR_FG_GRAY3=$FG[235]
-    POWERLINE_COLOR_FG_WHITE1=$FG[255]
-    POWERLINE_COLOR_FG_WHITE2=$FG[255]
+      if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
+          ZSH_THEME_NEMO_SETUP="snailware@"
+          POWERLINE_COLOR_BG_GRAY2=$BG[004]
+          POWERLINE_COLOR_FG_GRAY2=$FG[004]
+      else
+          POWERLINE_COLOR_BG_GRAY2=$BG[245]
+          POWERLINE_COLOR_FG_GRAY2=$FG[245]
+      fi
+      POWERLINE_COLOR_BG_GRAY1=$BG[237]
+      POWERLINE_COLOR_BG_GRAY3=
+      POWERLINE_COLOR_FG_GRAY1=$FG[237]
+      POWERLINE_COLOR_FG_GRAY3=$FG[235]
+      POWERLINE_COLOR_FG_WHITE1=$FG[255]
+      POWERLINE_COLOR_FG_WHITE2=$FG[255]
   }
 #+END_SRC
 
@@ -71,6 +72,9 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __server_scheme ()
   {
+      if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
+          ZSH_THEME_NEMO_SETUP="snailware@"
+      fi
       ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
       ZSH_THEME_NEMO_TIME=$FG[013]
 
@@ -90,6 +94,9 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __lal_scheme ()
   {
+      if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
+          ZSH_THEME_NEMO_SETUP="snailware@"
+      fi
       ZSH_THEME_NEMO_HOSTNAME_SUFFIX=
       ZSH_THEME_NEMO_HOSTNAME=$FG[172]
       ZSH_THEME_NEMO_TIME=$fg[green]
@@ -139,44 +146,46 @@ Default theme which color change with respect to the hostname.
 #+END_SRC
 
 ** Prompt settings
-*** Load scheme
-#+BEGIN_SRC sh
-  if [ "$TERM" = "eterm-color" ]; then
-      __emacs_terminal_scheme
-  else
-      case $HOSTNAME in
-          garrido-laptop)
-                  __laptop_scheme;;
-          pc-91089)
-                  __server_scheme;;
-          lx*.lal.in2p3.fr|nemo*.lal.in2p3.fr)
-                  __lal_scheme;;
-          ccige*.in2p3.fr|ccage*.in2p3.fr)
-                  __lyon_scheme;;
-          *)
-                  __default_scheme;;
-      esac
-  fi
-#+END_SRC
-
-#+RESULTS:
-
 *** Set prompt
 #+BEGIN_SRC sh
-  if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
-      PROMPT='
+  function __set_prompt ()
+  {
+      if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
+          PROMPT='
 '%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}' '%T' '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY1%}%{$POWERLINE_COLOR_BG_GRAY2%}$'\u2b80'%{$reset_color%}%{$POWERLINE_COLOR_FG_WHITE2%}%{$POWERLINE_COLOR_BG_GRAY2%}' ${ZSH_THEME_NEMO_SETUP}${HOSTNAME} '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY2%}%{$POWERLINE_COLOR_BG_GRAY3%}$'\u2b80'%{$reset_color%}' ${PWD/#$HOME/~}
 ➜  '
-      if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
-          RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%} $(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
+          if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
+              RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
+          fi
+      else
+          PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_HOSTNAME}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_HOSTNAME}%}
+    $ %{$reset_color%}'
+          if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
+              RPROMPT='%{${ZSH_THEME_NEMO_TIME}%}$(git_prompt_info)%{${ZSH_THEME_NEMO_TIME}%}$(svn_prompt_info)%{$reset_color%}'
+          fi
       fi
-  else
-      PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_HOSTNAME}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_HOSTNAME}%}
-$ %{$reset_color%}'
-      if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
-          RPROMPT='%{${ZSH_THEME_NEMO_TIME}%}$(git_prompt_info)%{${ZSH_THEME_NEMO_TIME}%}$(svn_prompt_info)%{$reset_color%}'
-      fi
-  fi
+  }
 #+END_SRC
-
-#+RESULTS:
+*** Load scheme
+#+BEGIN_SRC sh
+  function __load_scheme ()
+  {
+      if [ "$TERM" = "eterm-color" ]; then
+          __emacs_terminal_scheme
+      else
+          case $HOSTNAME in
+              garrido-laptop)
+                  __laptop_scheme;;
+              pc-91089)
+                  __server_scheme;;
+              lx*.lal.in2p3.fr|nemo*.lal.in2p3.fr)
+                  __lal_scheme;;
+              ccige*.in2p3.fr|ccage*.in2p3.fr)
+                  __lyon_scheme;;
+              *)
+                  __default_scheme;;
+          esac
+          __set_prompt
+      fi
+  }
+#+END_SRC
