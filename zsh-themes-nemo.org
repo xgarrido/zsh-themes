@@ -21,7 +21,6 @@ Default theme which color change with respect to the hostname.
 #+END_SRC
 
 ** Color definitions
-
 *** Default scheme
 #+BEGIN_SRC sh
   function __default_scheme ()
@@ -183,7 +182,7 @@ $ %{$reset_color%}'
                   __server_scheme;;
               lx*.lal.in2p3.fr|nemo*.lal.in2p3.fr)
                   __lal_scheme;;
-              ccige*.in2p3.fr|ccage*.in2p3.fr)
+              ccige*|ccage*)
                   __lyon_scheme;;
               *)
                   __default_scheme;;
