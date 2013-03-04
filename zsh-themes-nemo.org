@@ -117,6 +117,9 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __lyon_scheme ()
   {
+      if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
+          ZSH_THEME_NEMO_SETUP="snailware@"
+      fi
       ZSH_THEME_NEMO_HOSTNAME_SUFFIX=
       ZSH_THEME_NEMO_HOSTNAME=$FG[012]
       ZSH_THEME_NEMO_TIME=$FG[005]
