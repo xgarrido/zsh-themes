@@ -168,6 +168,9 @@ $ %{$reset_color%}'
       fi
   }
 #+END_SRC
+
+#+RESULTS:
+
 *** Load scheme
 #+BEGIN_SRC sh
   function __load_scheme ()
@@ -187,7 +190,7 @@ $ %{$reset_color%}'
               *)
                   __default_scheme;;
           esac
-          __set_prompt
       fi
+      __set_prompt
   }
 #+END_SRC
