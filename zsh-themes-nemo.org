@@ -148,6 +148,35 @@ Default theme which color change with respect to the hostname.
 #+END_SRC
 
 ** Prompt settings
+*** Battery prompt
+#+BEGIN_SRC sh
+  function battery_pct_remaining()
+  {
+      if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
+          echo "$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
+      fi
+  }
+
+  function battery_time_remaining()
+  {
+      if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
+          echo $(acpi | cut -f3 -d ',')
+      fi
+  }
+
+  function battery_pct_prompt()
+  {
+      b=$(battery_pct_remaining)
+      if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
+          if [ $b -lt 10 ] ; then
+              color='red'
+          fi
+          echo " %{$fg[$color]%}$(battery_pct_remaining)%% "
+      else
+          echo " ∞ "
+      fi
+  }
+#+END_SRC
 *** Set prompt
 #+BEGIN_SRC sh
   function __set_prompt ()
@@ -156,20 +185,21 @@ Default theme which color change with respect to the hostname.
           PROMPT='
 '%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}' '%T' '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY1%}%{$POWERLINE_COLOR_BG_GRAY2%}$'\u2b80'%{$reset_color%}%{$POWERLINE_COLOR_FG_WHITE2%}%{$POWERLINE_COLOR_BG_GRAY2%}' ${ZSH_THEME_NEMO_SETUP}${HOSTNAME} '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY2%}%{$POWERLINE_COLOR_BG_GRAY3%}$'\u2b80'%{$reset_color%}' ${PWD/#$HOME/~}
 ➜  '
-          if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
+          if [ "$HOSTNAME" = "garrido-laptop" ]; then
+              RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}$(battery_pct_prompt)%{$POWERLINE_COLOR_FG_GRAY2%}\u2b82%{$POWERLINE_COLOR_BG_GRAY2%}%{$POWERLINE_COLOR_FG_WHITE1%}$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
+          fi
+          if [ "$HOSTNAME" = "pc-91089" ]; then
               RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
           fi
       else
           PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_HOSTNAME}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_HOSTNAME}%}
-$ %{$reset_color%}'
+  $ %{$reset_color%}'
           if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
               RPROMPT='%{${ZSH_THEME_NEMO_TIME}%}$(git_prompt_info)%{${ZSH_THEME_NEMO_TIME}%}$(svn_prompt_info)%{$reset_color%}'
           fi
       fi
   }
 #+END_SRC
-
-#+RESULTS:
 
 *** Load scheme
 #+BEGIN_SRC sh
