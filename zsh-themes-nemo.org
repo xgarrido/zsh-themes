@@ -9,12 +9,13 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   ZSH_THEME_NEMO_USE_POWERLINE=0
 
-  ZSH_THEME_GIT_PROMPT_PREFIX="git:("
+  DISABLE_UNTRACKED_FILES_DIRTY=true
+  ZSH_THEME_GIT_PROMPT_PREFIX=" git:("
   ZSH_THEME_GIT_PROMPT_SUFFIX=""
   ZSH_THEME_GIT_PROMPT_DIRTY=") ✘ "
   ZSH_THEME_GIT_PROMPT_CLEAN=") ✔ "
 
-  ZSH_THEME_SVN_PROMPT_PREFIX="svn:("
+  ZSH_THEME_SVN_PROMPT_PREFIX=" svn:("
   ZSH_THEME_SVN_PROMPT_SUFFIX=""
   ZSH_THEME_SVN_PROMPT_DIRTY=") ✘ "
   ZSH_THEME_SVN_PROMPT_CLEAN=") ✔ "
@@ -61,9 +62,13 @@ Default theme which color change with respect to the hostname.
       POWERLINE_COLOR_BG_GRAY1=$BG[237]
       POWERLINE_COLOR_BG_GRAY3=
       POWERLINE_COLOR_FG_GRAY1=$FG[237]
-      POWERLINE_COLOR_FG_GRAY3=$FG[235]
+      POWERLINE_COLOR_FG_GRAY3=$FG[237]
       POWERLINE_COLOR_FG_WHITE1=$FG[255]
       POWERLINE_COLOR_FG_WHITE2=$FG[255]
+      POWERLINE_COLOR_BG_BATTERY=$BG[237]
+      POWERLINE_COLOR_FG_BATTERY=$FG[237]
+      POWERLINE_COLOR_FG_CVS=$fg[green]
+      POWERLINE_COLOR_BG_CVS=$bg[green]
   }
 #+END_SRC
 
@@ -169,36 +174,82 @@ Default theme which color change with respect to the hostname.
       b=$(battery_pct_remaining)
       if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
           if [ $b -lt 10 ] ; then
-              color='red'
+              POWERLINE_COLOR_BG_BATTERY=$bg[red]
+              POWERLINE_COLOR_FG_BATTERY=$fg[red]
           fi
-          echo " %{$fg[$color]%}$(battery_pct_remaining)%% "
+          echo -ne %{$POWERLINE_COLOR_FG_BATTERY%}$'\u2b82'%{$reset_color%}%{$POWERLINE_COLOR_BG_BATTERY%}%{$POWERLINE_COLOR_FG_WHITE1%}
+          echo -ne " $(battery_pct_remaining)%% "
+      # else
+      #     echo " ∞ "
+      fi
+  }
+#+END_SRC
+*** =git= prompt
+#+BEGIN_SRC sh
+  function check_git_dirty() {
+      local SUBMODULE_SYNTAX=''
+      local GIT_STATUS=''
+      local CLEAN_MESSAGE='nothing to commit (working directory clean)'
+      if [[ "$(command git config --get oh-my-zsh.hide-status)" != "1" ]]; then
+          if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+              SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+          fi
+          if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
+              GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} -uno 2> /dev/null | tail -n1)
+          else
+              GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
+          fi
+          if [[ -n $GIT_STATUS ]]; then
+              return 1
+              #echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+          else
+              return 0
+              #echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+          fi
       else
-          echo " ∞ "
+          return 0
+          #echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+      fi
+  }
+
+  function git_prompt_info() {
+      ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
+          ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+      if $(check_git_dirty); then
+          POWERLINE_COLOR_FG_CVS=$fg[green]
+          POWERLINE_COLOR_BG_CVS=$bg[green]
+          echo -ne %{$POWERLINE_COLOR_FG_CVS%}$'\u2b82'%{$POWERLINE_COLOR_BG_CVS%}%{$POWERLINE_COLOR_FG_WHITE1%}
+          echo -ne "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$ZSH_THEME_GIT_PROMPT_CLEAN$ZSH_THEME_GIT_PROMPT_SUFFIX"
+      else
+          POWERLINE_COLOR_FG_CVS=$fg[red]
+          POWERLINE_COLOR_BG_CVS=$bg[red]
+          echo -ne %{$POWERLINE_COLOR_FG_CVS%}$'\u2b82'%{$POWERLINE_COLOR_BG_CVS%}%{$POWERLINE_COLOR_FG_WHITE1%}
+          echo -ne "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$ZSH_THEME_GIT_PROMPT_DIRTY$ZSH_THEME_GIT_PROMPT_SUFFIX"
       fi
   }
 #+END_SRC
 *** Set prompt
 #+BEGIN_SRC sh
-  function __set_prompt ()
-  {
-      if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
-          PROMPT='
+    function __set_prompt ()
+    {
+        if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
+            PROMPT='
 '%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}' '%T' '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY1%}%{$POWERLINE_COLOR_BG_GRAY2%}$'\u2b80'%{$reset_color%}%{$POWERLINE_COLOR_FG_WHITE2%}%{$POWERLINE_COLOR_BG_GRAY2%}' ${ZSH_THEME_NEMO_SETUP}${HOSTNAME} '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY2%}%{$POWERLINE_COLOR_BG_GRAY3%}$'\u2b80'%{$reset_color%}' ${PWD/#$HOME/~}
 ➜  '
-          if [ "$HOSTNAME" = "garrido-laptop" ]; then
-              RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}$(battery_pct_prompt)%{$POWERLINE_COLOR_FG_GRAY2%}\u2b82%{$POWERLINE_COLOR_BG_GRAY2%}%{$POWERLINE_COLOR_FG_WHITE1%}$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
-          fi
-          if [ "$HOSTNAME" = "pc-91089" ]; then
-              RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
-          fi
-      else
-          PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_HOSTNAME}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_HOSTNAME}%}
-  $ %{$reset_color%}'
-          if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
-              RPROMPT='%{${ZSH_THEME_NEMO_TIME}%}$(git_prompt_info)%{${ZSH_THEME_NEMO_TIME}%}$(svn_prompt_info)%{$reset_color%}'
-          fi
-      fi
-  }
+            if [ "$HOSTNAME" = "garrido-laptop" ]; then
+                RPROMPT=$(battery_pct_prompt)$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}
+            fi
+            if [ "$HOSTNAME" = "pc-91089" ]; then
+                RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
+            fi
+        else
+            PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_HOSTNAME}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_HOSTNAME}%}
+        $ %{$reset_color%}'
+            if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
+                RPROMPT='%{${ZSH_THEME_NEMO_TIME}%}$(git_prompt_info)%{${ZSH_THEME_NEMO_TIME}%}$(svn_prompt_info)%{$reset_color%}'
+            fi
+        fi
+    }
 #+END_SRC
 
 *** Load scheme
@@ -217,7 +268,7 @@ Default theme which color change with respect to the hostname.
                   __lal_scheme;;
               ccige*|ccage*)
                   __lyon_scheme;;
-              *)
+              ,*)
                   __default_scheme;;
           esac
       fi
