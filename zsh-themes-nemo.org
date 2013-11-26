@@ -157,21 +157,24 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function battery_pct_prompt()
   {
-      if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*') -eq 0 ]] ; then
+      acpi="$(acpi 2&>/dev/null)"
+      if [[ $(echo $acpi | grep -c '^Battery.*') -eq 0 ]] ; then
           return
       fi
-      b=""
-      if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Full') -gt 0 ]] ; then
-          b=" ⌁ "
-      elif [[ $(acpi 2&>/dev/null | grep -c '^Battery.*harging') -gt 0 ]] ; then
-          b=$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')
+      b=" "
+      if [[ $(echo $acpi | grep -c '^Battery.*Full') -gt 0 ]] ; then
+          b+="⌁ "
+      elif [[ $(echo $acpi | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
+          b+=$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')
           if [ $b -lt 10 ] ; then
               POWERLINE_COLOR_BG_BATTERY=$bg[red]
               POWERLINE_COLOR_FG_BATTERY=$fg[red]
           fi
-      elif [[ $(acpi 2&>/dev/null | grep -c '^Battery.*Charging') -gt 0 ]] ; then
+          b+="%% "
+      elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
           b+=" ⌁ "
           b+=$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')
+          b+="% "
       fi
       echo -ne %{$POWERLINE_COLOR_FG_BATTERY%}$'\u2b82'%{$reset_color%}%{$POWERLINE_COLOR_BG_BATTERY%}%{$POWERLINE_COLOR_FG_WHITE1%}
       echo $b
