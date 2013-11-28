@@ -174,7 +174,7 @@ Default theme which color change with respect to the hostname.
       elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
           b+=" ⌁ "
           b+=$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')
-          b+="% "
+          b+="%% "
       fi
       echo -ne %{$POWERLINE_COLOR_FG_BATTERY%}$'\u2b82'%{$reset_color%}%{$POWERLINE_COLOR_BG_BATTERY%}%{$POWERLINE_COLOR_FG_WHITE1%}
       echo $b
