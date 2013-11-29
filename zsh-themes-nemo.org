@@ -161,18 +161,18 @@ Default theme which color change with respect to the hostname.
       if [[ $(echo $acpi | grep -c '^Battery.*') -eq 0 ]] ; then
           return
       fi
-      b=" "
+      b=
       if [[ $(echo $acpi | grep -c '^Battery.*Full') -gt 0 ]] ; then
           b+="⌁ "
       elif [[ $(echo $acpi | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-          b+=$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')
+          b+=" $(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
           if [ $b -lt 10 ] ; then
               POWERLINE_COLOR_BG_BATTERY=$bg[red]
               POWERLINE_COLOR_FG_BATTERY=$fg[red]
           fi
           b+="%% "
       elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
-          b+=" ⌁ "
+          b+="⌁ "
           b+=$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')
           b+="%% "
       fi
