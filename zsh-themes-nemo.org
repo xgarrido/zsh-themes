@@ -319,7 +319,7 @@ Default theme which color change with respect to the hostname.
             fi
         else
             PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_HOSTNAME}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_HOSTNAME}%}
- $ %{$reset_color%}'
+$ %{$reset_color%}'
             if [[ "$HOSTNAME" = "garrido-laptop" || "$HOSTNAME" = "pc-91089" ]]; then
                 RPROMPT='%{${ZSH_THEME_NEMO_TIME}%}$(git_prompt_info)%{${ZSH_THEME_NEMO_TIME}%}$(svn_prompt_info)%{$reset_color%}'
             fi
