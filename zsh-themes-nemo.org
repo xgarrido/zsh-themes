@@ -57,8 +57,8 @@ Default theme which color change with respect to the hostname.
           POWERLINE_COLOR_FG_GRAY2=$FG[004]
       elif [ "${AGGREGATOR_SETUP_DONE}" = 1 ]; then
           ZSH_THEME_NEMO_SETUP="aggregator♿ "
-          POWERLINE_COLOR_BG_GRAY2=$bg[red]
-          POWERLINE_COLOR_FG_GRAY2=$fg[red]
+          POWERLINE_COLOR_BG_GRAY2=$bg[blue]
+          POWERLINE_COLOR_FG_GRAY2=$fg[blue]
       else
           POWERLINE_COLOR_BG_GRAY2=$BG[245]
           POWERLINE_COLOR_FG_GRAY2=$FG[245]
