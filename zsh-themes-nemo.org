@@ -257,7 +257,7 @@ Default theme which color change with respect to the hostname.
           # LC_MESSAGES=en_GB svn info | sed -n 's/Repository\ Root:\ .*\///p' | read SVN_ROOT
           # LC_MESSAGES=en_GB svn info | sed -n "s/URL:\ .*$SVN_ROOT\///p" | sed "s/\/.*$//"
           info=$(LC_MESSAGES=en_GB svn info)
-          repo=$(echo ${info} | sed -n 's/URL:\ .*\///p')
+          repo=$(echo ${info} | sed -n 's/^URL:\ .*\///p')
           rev=$(echo ${info} | sed -n 's/Revision:\ //p')
           echo "${repo}|${rev}"
       fi
@@ -275,17 +275,17 @@ Default theme which color change with respect to the hostname.
 #+END_SRC
 **** SVN dirty choose
 #+BEGIN_SRC sh
-    function check_svn_dirty ()
-    {
-        if __in_svn; then
-            s=$(svn status|grep -E '^\s*[ACDIM!L]' 2>/dev/null)
-            if [ $s ]; then
-                return 1
-            else
-                return 0
-            fi
-        fi
-    }
+  function check_svn_dirty ()
+  {
+      if __in_svn; then
+          s=$(svn status|grep -E '^\s*[ACDIM!L]' 2>/dev/null)
+          if [ $s ]; then
+              return 1
+          else
+              return 0
+          fi
+      fi
+  }
 #+END_SRC
 **** SVN prompt info
 #+BEGIN_SRC sh
