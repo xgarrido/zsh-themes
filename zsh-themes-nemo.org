@@ -50,7 +50,6 @@ Default theme which color change with respect to the hostname.
       ZSH_THEME_NEMO_USE_POWERLINE=1
       ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
       ZSH_THEME_NEMO_TIME=$fg[red]
-
       if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
           ZSH_THEME_NEMO_SETUP="snailware@"
           POWERLINE_COLOR_BG_GRAY2=$BG[004]
@@ -71,7 +70,7 @@ Default theme which color change with respect to the hostname.
       POWERLINE_COLOR_FG_WHITE2=$FG[255]
       POWERLINE_COLOR_BG_BATTERY=$BG[237]
       POWERLINE_COLOR_FG_BATTERY=$FG[237]
-      RPROMPT=$(battery_pct_prompt)$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}
+      RPROMPT=$(my_battery_prompt_info)$(my_virtualenv_prompt_info)$(my_git_prompt_info)$(my_svn_prompt_info)%{$reset_color%}
   }
 #+END_SRC
 
@@ -161,7 +160,7 @@ Default theme which color change with respect to the hostname.
 ** Prompt settings
 *** Battery prompt
 #+BEGIN_SRC sh
-  function battery_pct_prompt()
+  function my_battery_prompt_info()
   {
       acpi="$(acpi 2&>/dev/null)"
       if [[ $(echo $acpi | grep -c '^Battery.*') -eq 0 ]] ; then
@@ -224,7 +223,7 @@ Default theme which color change with respect to the hostname.
       fi
   }
 
-  function git_prompt_info()
+  function my_git_prompt_info()
   {
       ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
           ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
@@ -301,7 +300,7 @@ Default theme which color change with respect to the hostname.
 #+END_SRC
 **** SVN prompt info
 #+BEGIN_SRC sh
-  function svn_prompt_info ()
+  function my_svn_prompt_info ()
   {
       if __in_svn; then
           if $(check_svn_dirty); then
@@ -323,6 +322,19 @@ Default theme which color change with respect to the hostname.
   }
 #+END_SRC
 
+*** =virtualenv= prompt
+#+BEGIN_SRC sh
+  function my_virtualenv_prompt_info()
+  {
+      local info=$(virtualenv_prompt_info)
+      POWERLINE_COLOR_FG_VE=$fg[blue]
+      POWERLINE_COLOR_BG_VE=$bg[blue]
+      if [ ! -z ${info} ]; then
+          echo -ne %{$POWERLINE_COLOR_FG_VE%}$'\u2b82'%{$POWERLINE_COLOR_BG_VE%}%{$POWERLINE_COLOR_FG_WHITE1%}
+          echo -ne "♻ ${info//[\[\]]/}"
+      fi
+  }
+#+END_SRC
 *** Set prompt
 #+BEGIN_SRC sh
     function __set_prompt ()
@@ -354,7 +366,7 @@ $ %{$reset_color%}'
                   __lal_scheme;;
               ccige*|ccage*|cc*)
                   __lyon_scheme;;
-              ,*)
+              *)
                   __default_scheme;;
           esac
       fi
