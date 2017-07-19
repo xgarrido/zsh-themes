@@ -127,20 +127,11 @@ Default theme which color change with respect to the hostname.
       if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
           ZSH_THEME_NEMO_SETUP="snailware@"
       fi
-      ZSH_THEME_NEMO_HOSTNAME_SUFFIX=
-      ZSH_THEME_NEMO_HOSTNAME=$FG[012]
-      ZSH_THEME_NEMO_TIME=$FG[005]
-
-      ZSH_THEME_NEMO_USE_POWERLINE=0
-      POWERLINE_COLOR_BG_GRAY1=$BG[012]
-      POWERLINE_COLOR_BG_GRAY2=$BG[005]
-      POWERLINE_COLOR_BG_GRAY3=
-
-      POWERLINE_COLOR_FG_GRAY1=$FG[012]
-      POWERLINE_COLOR_FG_GRAY2=$FG[005]
-      POWERLINE_COLOR_FG_GRAY3=$FG[005]
-      POWERLINE_COLOR_FG_WHITE1=$FG[005]
-      POWERLINE_COLOR_FG_WHITE2=$FG[012]
+      ZSH_THEME_NEMO_HOSTNAME_SUFFIX="[zsh] "
+      ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
+      ZSH_THEME_NEMO_PATH=$fg[green]
+      ZSH_THEME_NEMO_TIME=$fg[yellow]
+      ZSH_THEME_NEMO_DOLLAR=$fg[red]
   }
 #+END_SRC
 *** Emacs terminal scheme
@@ -344,7 +335,7 @@ Default theme which color change with respect to the hostname.
 '%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}' '%T' '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY1%}%{$POWERLINE_COLOR_BG_GRAY2%}$'\u2b80'%{$reset_color%}%{$POWERLINE_COLOR_FG_WHITE2%}%{$POWERLINE_COLOR_BG_GRAY2%}' ${ZSH_THEME_NEMO_SETUP}${HOSTNAME} '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY2%}%{$POWERLINE_COLOR_BG_GRAY3%}$'\u2b80'%{$reset_color%}' ${PWD/#$HOME/~}
 ➜  '
         else
-            PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_HOSTNAME}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_HOSTNAME}%}
+            PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_PATH}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_DOLLAR}%}
 $ %{$reset_color%}'
         fi
     }
