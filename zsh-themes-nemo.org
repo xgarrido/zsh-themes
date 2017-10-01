@@ -144,7 +144,7 @@ Default theme which color change with respect to the hostname.
       ZSH_THEME_NEMO_USE_POWERLINE=0
       # Redefine color for ls
       export LS_COLORS='di=33:ex=31'
-      RPROMPT=$(battery_pct_prompt)$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}
+      RPROMPT=$(my_battery_prompt_info)$(my_git_prompt_info)$(my_svn_prompt_info)%{$reset_color%}
   }
 #+END_SRC
 
@@ -153,7 +153,7 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function my_battery_prompt_info()
   {
-      acpi="$(acpi 2&>/dev/null)"
+      acpi="$(acpi | tail -n1 2&>/dev/null)"
       if [[ $(echo $acpi | grep -c '^Battery.*') -eq 0 ]] ; then
           return
       fi
@@ -169,7 +169,7 @@ Default theme which color change with respect to the hostname.
           b+="%% "
       elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
           b+="↯ "
-          b+=$(acpi | cut -f2 -d ',' | tr -cd '[:digit:]')
+          b+="$(echo acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
           b+="%% "
       fi
       if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
