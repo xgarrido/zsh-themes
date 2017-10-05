@@ -147,7 +147,7 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function my_battery_prompt_info()
   {
-      acpi="$(acpi | tail -n1 2&>/dev/null)"
+      acpi="$(acpi | grep -v unavailable 2&>/dev/null)"
       if [[ $(echo $acpi | grep -c '^Battery.*') -eq 0 ]] ; then
           return
       fi
@@ -163,7 +163,7 @@ Default theme which color change with respect to the hostname.
           b+="%% "
       elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
           b+="↯ "
-          b+="$(echo acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
+          b+="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
           b+="%% "
       fi
       if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
@@ -316,7 +316,7 @@ Default theme which color change with respect to the hostname.
       POWERLINE_COLOR_BG_VE=$bg[blue]
       if [ ! -z ${info} ]; then
           echo -ne %{$POWERLINE_COLOR_FG_VE%}$'\u2b82'%{$POWERLINE_COLOR_BG_VE%}%{$POWERLINE_COLOR_FG_WHITE1%}
-          echo -ne "♻ ${info//[\[\]]/}"
+          echo -ne "♻ ${info//[\[\]]/} "
       fi
   }
 #+END_SRC
