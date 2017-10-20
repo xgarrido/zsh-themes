@@ -26,8 +26,8 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __default_scheme ()
   {
-      if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
-          ZSH_THEME_NEMO_SETUP="snailware@"
+      if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
+          ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
       fi
       ZSH_THEME_NEMO_HOSTNAME_SUFFIX="[zsh] "
       ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
@@ -44,15 +44,17 @@ Default theme which color change with respect to the hostname.
       ZSH_THEME_NEMO_USE_POWERLINE=1
       ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
       ZSH_THEME_NEMO_TIME=$fg[red]
-      if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
-          ZSH_THEME_NEMO_SETUP="snailware@"
-          POWERLINE_COLOR_BG_GRAY2=$BG[004]
-          POWERLINE_COLOR_FG_GRAY2=$FG[004]
-      elif [ "${AGGREGATOR_SETUP_DONE}" = 1 ]; then
-          ZSH_THEME_NEMO_SETUP="aggregator♿ "
-          POWERLINE_COLOR_BG_GRAY2=$bg[blue]
-          POWERLINE_COLOR_FG_GRAY2=$fg[blue]
+      if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
+          ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
+          if [[ ${PKGMAN_SETUP_DONE} = cmb ]]; then
+              POWERLINE_COLOR_BG_GRAY2=$bg[cyan]
+              POWERLINE_COLOR_FG_GRAY2=$fg[cyan]
+          elif [[ ${PKGMAN_SETUP_DONE} = snemo ]]; then
+              POWERLINE_COLOR_BG_GRAY2=$bg[magenta]
+              POWERLINE_COLOR_FG_GRAY2=$fg[magenta]
+          fi
       else
+          ZSH_THEME_NEMO_SETUP=
           POWERLINE_COLOR_BG_GRAY2=$BG[245]
           POWERLINE_COLOR_FG_GRAY2=$FG[245]
       fi
@@ -118,8 +120,8 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __lyon_scheme ()
   {
-      if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
-          ZSH_THEME_NEMO_SETUP="snailware@"
+      if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
+          ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
       fi
       ZSH_THEME_NEMO_HOSTNAME_SUFFIX="[zsh] "
       ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
