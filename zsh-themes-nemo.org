@@ -347,7 +347,7 @@ $ %{$reset_color%}'
           __emacs_terminal_scheme
       else
           case $HOSTNAME in
-              garrido-laptop)
+              garrido-laptop|nb-garrido)
                   __laptop_scheme;;
               pc-91089)
                   __server_scheme;;
