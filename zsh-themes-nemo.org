@@ -151,6 +151,9 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function my_battery_prompt_info()
   {
+      if ! $(pkgtools__has_binary acpi); then
+          return
+      fi
       acpi="$(acpi | grep -v unavailable 2&>/dev/null)"
       if [[ $(echo $acpi | grep -c '^Battery.*') -eq 0 ]] ; then
           return
@@ -178,6 +181,9 @@ Default theme which color change with respect to the hostname.
 
   function battery_time_remaining()
   {
+      if ! $(pkgtools__has_binary acpi); then
+          return
+      fi
       if [[ $(acpi 2&>/dev/null | grep -c '^Battery.*') -gt 0 ]] ; then
           echo $(acpi | cut -f3 -d ',')
       fi
