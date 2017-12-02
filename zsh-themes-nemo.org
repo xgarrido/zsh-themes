@@ -357,8 +357,6 @@ $ %{$reset_color%}'
                   __laptop_scheme;;
               pc-91089)
                   __server_scheme;;
-              lx*.lal.in2p3.fr|nemo*.lal.in2p3.fr)
-                  __lal_scheme;;
               ccige*|ccage*|cc*)
                   __lyon_scheme;;
               *)
