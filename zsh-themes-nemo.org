@@ -10,10 +10,10 @@ Default theme which color change with respect to the hostname.
   ZSH_THEME_NEMO_USE_POWERLINE=0
 
   DISABLE_UNTRACKED_FILES_DIRTY=true
-  ZSH_THEME_GIT_PROMPT_PREFIX=" git:("
+  ZSH_THEME_GIT_PROMPT_PREFIX="  "
   ZSH_THEME_GIT_PROMPT_SUFFIX=""
-  ZSH_THEME_GIT_PROMPT_DIRTY=") ✘ "
-  ZSH_THEME_GIT_PROMPT_CLEAN=") ✔ "
+  ZSH_THEME_GIT_PROMPT_DIRTY="  "
+  ZSH_THEME_GIT_PROMPT_CLEAN="  "
 
   ZSH_THEME_SVN_PROMPT_PREFIX=" svn:("
   ZSH_THEME_SVN_PROMPT_SUFFIX=""
@@ -162,12 +162,12 @@ Default theme which color change with respect to the hostname.
       if [[ $(echo $acpi | grep -c '^Battery.*Full') -gt 0 ]] ; then
           b+="↯ "
       elif [[ $(echo $acpi | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
-          b+=" $(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
-          if [ $b -lt 10 ] ; then
+          local level="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
+          if [ $level -lt 10 ] ; then
               POWERLINE_COLOR_BG_BATTERY=$bg[red]
               POWERLINE_COLOR_FG_BATTERY=$fg[red]
           fi
-          b+="%% "
+          b+="   ${level}%% "
       elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
           b+="↯ "
           b+="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
