@@ -41,17 +41,25 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __laptop_scheme ()
   {
-      ZSH_THEME_NEMO_USE_POWERLINE=1
-      ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
-      ZSH_THEME_NEMO_TIME=$fg[red]
+      ZSH_THEME_NEMO_USE_POWERLINE=0
+      ZSH_THEME_NEMO_HOSTNAME="$fg[blue]  "
+      ZSH_THEME_NEMO_PATH="$fg[green]  "
+      ZSH_THEME_NEMO_TIME="$fg[yellow] "
+      ZSH_THEME_NEMO_DOLLAR="$fg[magenta]"
       if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
           ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
           if [[ ${PKGMAN_SETUP_DONE} = cmb ]]; then
               POWERLINE_COLOR_BG_GRAY2=$bg[cyan]
               POWERLINE_COLOR_FG_GRAY2=$fg[cyan]
+              if [[ "$ZSH_THEME_NEMO_USE_POWERLINE" == "0" ]]; then
+                  ZSH_THEME_NEMO_SETUP="$fg[cyan][⊶  ${PKGMAN_SETUP_DONE}] "
+              fi
           elif [[ ${PKGMAN_SETUP_DONE} = snemo ]]; then
               POWERLINE_COLOR_BG_GRAY2=$bg[magenta]
               POWERLINE_COLOR_FG_GRAY2=$fg[magenta]
+              if [[ "$ZSH_THEME_NEMO_USE_POWERLINE" == "0" ]]; then
+                  ZSH_THEME_NEMO_SETUP="$fg[magenta][⊶  ${PKGMAN_SETUP_DONE}] "
+              fi
           fi
       else
           ZSH_THEME_NEMO_SETUP=
@@ -167,7 +175,7 @@ Default theme which color change with respect to the hostname.
               POWERLINE_COLOR_BG_BATTERY=$bg[red]
               POWERLINE_COLOR_FG_BATTERY=$fg[red]
           fi
-          b+="   ${level}%% "
+          b+="   ${level}%% "
       elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
           b+="↯ "
           b+="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
@@ -325,24 +333,28 @@ Default theme which color change with respect to the hostname.
       POWERLINE_COLOR_FG_VE=$fg[blue]
       POWERLINE_COLOR_BG_VE=$bg[blue]
       if [ ! -z ${info} ]; then
-          echo -ne %{$POWERLINE_COLOR_FG_VE%}$'\u2b82'%{$POWERLINE_COLOR_BG_VE%}%{$POWERLINE_COLOR_FG_WHITE1%}
-          echo -ne "♻ ${info//[\[\]]/} "
+          if [[ "$ZSH_THEME_NEMO_USE_POWERLINE" == "1" ]]; then
+              echo -ne %{$POWERLINE_COLOR_FG_VE%}$'\u2b82'%{$POWERLINE_COLOR_BG_VE%}%{$POWERLINE_COLOR_FG_WHITE1%}
+          else
+              echo -ne %{$POWERLINE_COLOR_FG_VE%}
+          fi
+          echo -ne "  ${info//[\[\]]/}"
       fi
   }
 #+END_SRC
 *** Set prompt
 #+BEGIN_SRC sh
-    function __set_prompt ()
-    {
-        if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
-            PROMPT='
+  function __set_prompt ()
+  {
+      if [ "$ZSH_THEME_NEMO_USE_POWERLINE" = "1" ]; then
+          PROMPT='
 '%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}' '%T' '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY1%}%{$POWERLINE_COLOR_BG_GRAY2%}$'\u2b80'%{$reset_color%}%{$POWERLINE_COLOR_FG_WHITE2%}%{$POWERLINE_COLOR_BG_GRAY2%}' ${ZSH_THEME_NEMO_SETUP}${HOSTNAME} '%{$reset_color%}%{$POWERLINE_COLOR_FG_GRAY2%}%{$POWERLINE_COLOR_BG_GRAY3%}$'\u2b80'%{$reset_color%}' ${PWD/#$HOME/~}
 ➜  '
-        else
-            PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}%{$ZSH_THEME_NEMO_HOSTNAME%}${ZSH_THEME_NEMO_SETUP}${HOSTNAME} %{${ZSH_THEME_NEMO_PATH}%}${PWD/#$HOME/~}%{$reset_color%}%{${ZSH_THEME_NEMO_DOLLAR}%}
-$ %{$reset_color%}'
-        fi
-    }
+      else
+          PROMPT='%{${ZSH_THEME_NEMO_TIME}%}%T %{$ZSH_THEME_NEMO_HOSTNAME_SUFFIX%}${ZSH_THEME_NEMO_SETUP}%{$ZSH_THEME_NEMO_HOSTNAME%}${HOSTNAME} %{${ZSH_THEME_NEMO_PATH}%}${PWD/#$HOME/~}%{$reset_color%}
+%{${ZSH_THEME_NEMO_DOLLAR}%}%{$reset_color%}'
+      fi
+  }
 #+END_SRC
 
 *** Load scheme
