@@ -41,7 +41,7 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __laptop_scheme ()
   {
-      ZSH_THEME_NEMO_USE_POWERLINE=0
+      ZSH_THEME_NEMO_USE_POWERLINE=1
       ZSH_THEME_NEMO_HOSTNAME="$fg[blue]  "
       ZSH_THEME_NEMO_PATH="$fg[green]  "
       ZSH_THEME_NEMO_TIME="$fg[yellow] "
