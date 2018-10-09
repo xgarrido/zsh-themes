@@ -33,7 +33,7 @@ Default theme which color change with respect to the hostname.
       ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
       ZSH_THEME_NEMO_PATH=$fg[green]
       ZSH_THEME_NEMO_TIME=$fg[yellow]
-      ZSH_THEME_NEMO_DOLLAR=$fg[red]
+      ZSH_THEME_NEMO_DOLLAR="$fg[red]$"
   }
 #+END_SRC
 
@@ -137,7 +137,7 @@ Default theme which color change with respect to the hostname.
       ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
       ZSH_THEME_NEMO_PATH=$fg[green]
       ZSH_THEME_NEMO_TIME=$fg[yellow]
-      ZSH_THEME_NEMO_DOLLAR=$fg[red]
+      ZSH_THEME_NEMO_DOLLAR="$fg[red]$"
   }
 #+END_SRC
 *** Emacs terminal scheme
