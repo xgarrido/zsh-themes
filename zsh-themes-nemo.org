@@ -129,7 +129,7 @@ Default theme which color change with respect to the hostname.
   function __lyon_scheme ()
   {
       if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
-          ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
+          ZSH_THEME_NEMO_SETUP="$fg[cyan][⊶  ${PKGMAN_SETUP_DONE}] "
       else
           ZSH_THEME_NEMO_SETUP=
       fi
