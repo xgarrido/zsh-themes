@@ -365,7 +365,7 @@ Default theme which color change with respect to the hostname.
           __emacs_terminal_scheme
       else
           case $HOSTNAME in
-              garrido-laptop|nb-garrido)
+              garrido-laptop|nb-garrido|garrido-xps)
                   __laptop_scheme;;
               pc-91089)
                   __server_scheme;;
