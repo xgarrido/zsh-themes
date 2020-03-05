@@ -341,7 +341,7 @@ Default theme which color change with respect to the hostname.
           if [[ ${info} == *pyenv* ]]; then
               local info=$(echo ${VIRTUAL_ENV} | awk -F/ '{print $(NF-1)}')
           fi
-          echo -ne "  ${info//[\[\]]/}"
+          echo -ne "  ${info//[\[\]]/} "
       fi
   }
 #+END_SRC
