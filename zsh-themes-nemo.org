@@ -338,7 +338,10 @@ Default theme which color change with respect to the hostname.
           else
               echo -ne %{$POWERLINE_COLOR_FG_VE%}
           fi
-          echo -ne "  ${info//[\[\]]/}"
+          if [[ ${info} == *pyenv* ]]; then
+              local info=$(echo ${VIRTUAL_ENV} | awk -F/ '{print $(NF-1)}')
+          fi
+          echo -ne "  ${info//[\[\]]/}"
       fi
   }
 #+END_SRC
