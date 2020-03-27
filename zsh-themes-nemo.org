@@ -372,7 +372,7 @@ Default theme which color change with respect to the hostname.
                   __laptop_scheme;;
               pc-91089)
                   __server_scheme;;
-              ccige*|ccage*|cc*)
+              ccige*|ccage*|cc*|cori*)
                   __lyon_scheme;;
               *)
                   __default_scheme;;
