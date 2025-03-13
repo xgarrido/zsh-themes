@@ -29,7 +29,7 @@ Default theme which color change with respect to the hostname.
     if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
       ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
     fi
-    ZSH_THEME_NEMO_HOSTNAME_SUFFIX="[zsh] "
+    ZSH_THEME_NEMO_HOSTNAME_SUFFIX="[zsh] $fg[magenta]$(conda_prompt_info)$(virtualenv_prompt_info) "
     ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
     ZSH_THEME_NEMO_PATH=$fg[green]
     ZSH_THEME_NEMO_TIME=$fg[yellow]
