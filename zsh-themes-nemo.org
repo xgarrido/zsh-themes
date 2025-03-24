@@ -41,10 +41,10 @@ Default theme which color change with respect to the hostname.
 #+BEGIN_SRC sh
   function __laptop_scheme ()
   {
-    ZSH_THEME_NEMO_USE_POWERLINE=1
-    ZSH_THEME_NEMO_HOSTNAME="$fg[blue]  "
-    ZSH_THEME_NEMO_PATH="$fg[green]  "
-    ZSH_THEME_NEMO_TIME="$fg[yellow] "
+    ZSH_THEME_NEMO_USE_POWERLINE=0
+    ZSH_THEME_NEMO_HOSTNAME="$fg[magenta]  "
+    ZSH_THEME_NEMO_PATH="$fg[blue]  "
+    ZSH_THEME_NEMO_TIME="$fg[yellow]  "
     ZSH_THEME_NEMO_DOLLAR="$fg[magenta]"
     if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
       ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
@@ -78,36 +78,10 @@ Default theme which color change with respect to the hostname.
   }
 #+END_SRC
 
-*** PC server scheme
-#+BEGIN_SRC sh
-  function __server_scheme ()
-  {
-    if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
-      ZSH_THEME_NEMO_SETUP="snailware@"
-    fi
-    ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
-    ZSH_THEME_NEMO_TIME=$FG[013]
-
-    ZSH_THEME_NEMO_USE_POWERLINE=1
-    POWERLINE_COLOR_BG_GRAY1=$bg[blue]
-    POWERLINE_COLOR_BG_GRAY2=$BG[013]
-    POWERLINE_COLOR_BG_GRAY3=
-
-    POWERLINE_COLOR_FG_GRAY1=$fg[blue]
-    POWERLINE_COLOR_FG_GRAY2=$FG[013]
-    POWERLINE_COLOR_FG_WHITE1=$FG[255]
-    POWERLINE_COLOR_FG_WHITE2=$FG[255]
-    RPROMPT=%{$POWERLINE_COLOR_FG_GRAY1%}$'\u2b82%{$reset_color%}%{$POWERLINE_COLOR_BG_GRAY1%}%{$POWERLINE_COLOR_FG_WHITE1%}$(git_prompt_info)$(svn_prompt_info)%{$reset_color%}'
-  }
-#+END_SRC
-
 *** LAL scheme
 #+BEGIN_SRC sh
   function __lal_scheme ()
   {
-    if [ "${SNAILWARE_SETUP_DONE}" = 1 ]; then
-      ZSH_THEME_NEMO_SETUP="snailware@"
-    fi
     ZSH_THEME_NEMO_HOSTNAME_SUFFIX=
     ZSH_THEME_NEMO_HOSTNAME=$FG[172]
     ZSH_THEME_NEMO_TIME=$fg[green]
@@ -178,7 +152,7 @@ Default theme which color change with respect to the hostname.
     fi
     b=
     if [[ $(echo $acpi | grep -c '^Battery.*Full') -gt 0 ]] ; then
-      b+="↯ "
+      b+=" "
     elif [[ $(echo $acpi | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
       local level="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
       if [ $level -lt 10 ] ; then
@@ -187,7 +161,7 @@ Default theme which color change with respect to the hostname.
       fi
       b+="   ${level}%% "
     elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
-      b+="↯ "
+      b+=" "
       b+="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
       b+="%% "
     fi
@@ -380,8 +354,6 @@ $ '
       case $HOSTNAME in
         garrido-laptop|nb-garrido|garrido-xps)
           __laptop_scheme;;
-        pc-91089)
-          __server_scheme;;
         ccige*|ccage*|cc*|cori*|perlmutter*)
           __lyon_scheme;;
         *)
