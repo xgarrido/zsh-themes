@@ -79,7 +79,8 @@ Default theme which color change with respect to the hostname.
     POWERLINE_COLOR_FG_WHITE2=$FG[255]
     POWERLINE_COLOR_BG_BATTERY=$BG[237]
     POWERLINE_COLOR_FG_BATTERY=$FG[237]
-    ZSH_THEME_CONDA_PREFIX="%{$POWERLINE_COLOR_FG_VE%}  ["
+    ZSH_THEME_CONDA_PREFIX="%{$POWERLINE_COLOR_FG_VE%}  "
+    ZSH_THEME_CONDA_SUFFIX=" "
     RPROMPT=$(my_battery_prompt_info)$(conda_prompt_info)$(my_virtualenv_prompt_info)$(my_git_prompt_info)%{$reset_color%}
   }
 #+END_SRC
