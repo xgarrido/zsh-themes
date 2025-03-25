@@ -44,8 +44,13 @@ Default theme which color change with respect to the hostname.
     ZSH_THEME_NEMO_USE_POWERLINE=0
     ZSH_THEME_NEMO_HOSTNAME="$fg[magenta]  "
     ZSH_THEME_NEMO_PATH="$fg[blue]  "
-    ZSH_THEME_NEMO_TIME="$fg[yellow]  "
+    ZSH_THEME_NEMO_TIME="$fg_bold[yellow]"
     ZSH_THEME_NEMO_DOLLAR="$fg[magenta]"
+    if [[ ! -z ${ZSH_NAME} ]]; then
+      ZSH_THEME_NEMO_HOSTNAME_SUFFIX="$fg[cyan]  [zsh] "
+    else
+      ZSH_THEME_NEMO_HOSTNAME_SUFFIX="$fg[cyan]  [bash] "
+    fi          
     if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
       ZSH_THEME_NEMO_SETUP="[⊶  ${PKGMAN_SETUP_DONE}] "
       if [[ ${PKGMAN_SETUP_DONE} = cmb ]]; then
@@ -161,7 +166,7 @@ Default theme which color change with respect to the hostname.
       fi
       b+="   ${level}%% "
     elif [[ $(echo $acpi | grep -c '^Battery.*Charging') -gt 0 ]] ; then
-      b+=" "
+      b+="  "
       b+="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
       b+="%% "
     fi
@@ -351,14 +356,15 @@ $ '
     if $(pkgtools::check_variable INSIDE_EMACS); then
       __emacs_terminal_scheme
     else
-      case $HOSTNAME in
-        garrido-laptop|nb-garrido|garrido-xps)
-          __laptop_scheme;;
-        ccige*|ccage*|cc*|cori*|perlmutter*)
-          __lyon_scheme;;
-        *)
-          __default_scheme;;
-      esac
+      __laptop_scheme
+    #   case $HOSTNAME in
+    #     garrido-laptop|nb-garrido|garrido-xps)
+    #       __laptop_scheme;;
+    #     ccige*|ccage*|cc*|cori*|perlmutter*)
+    #       __lyon_scheme;;
+    #     *)
+    #       __default_scheme;;
+    #   esac
     fi
     __set_prompt
   }
