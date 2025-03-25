@@ -79,56 +79,11 @@ Default theme which color change with respect to the hostname.
     POWERLINE_COLOR_FG_WHITE2=$FG[255]
     POWERLINE_COLOR_BG_BATTERY=$BG[237]
     POWERLINE_COLOR_FG_BATTERY=$FG[237]
-    RPROMPT=$(my_battery_prompt_info)$(my_virtualenv_prompt_info)$(my_git_prompt_info)$(my_svn_prompt_info)%{$reset_color%}
+    ZSH_THEME_CONDA_PREFIX="  "
+    RPROMPT=$(my_battery_prompt_info)$(conda_prompt_info)$(my_virtualenv_prompt_info)$(my_git_prompt_info)%{$reset_color%}
   }
 #+END_SRC
 
-*** LAL scheme
-#+BEGIN_SRC sh
-  function __lal_scheme ()
-  {
-    ZSH_THEME_NEMO_HOSTNAME_SUFFIX=
-    ZSH_THEME_NEMO_HOSTNAME=$FG[172]
-    ZSH_THEME_NEMO_TIME=$fg[green]
-
-    ZSH_THEME_NEMO_USE_POWERLINE=0
-    POWERLINE_COLOR_BG_GRAY1=$BG[172]
-    POWERLINE_COLOR_BG_GRAY2=$bg[green]
-    POWERLINE_COLOR_BG_GRAY3=
-
-    POWERLINE_COLOR_FG_GRAY1=$FG[172]
-    POWERLINE_COLOR_FG_GRAY2=$fg[green]
-    POWERLINE_COLOR_FG_GRAY3=$FG[235]
-    POWERLINE_COLOR_FG_WHITE1=$fg[green]
-    POWERLINE_COLOR_FG_WHITE2=$FG[172]
-  }
-#+END_SRC
-*** Lyon scheme
-#+BEGIN_SRC sh
-  function __lyon_scheme ()
-  {
-    if [[ ! -z ${PKGMAN_SETUP_DONE} ]]; then
-      ZSH_THEME_NEMO_SETUP="$fg[cyan][⊶  ${PKGMAN_SETUP_DONE}] "
-    else
-      ZSH_THEME_NEMO_SETUP=
-      if [[ ! -z ${NERSC_HOST} ]]; then
-        case $(hostname) in
-          login*)
-            ZSH_THEME_NEMO_SETUP="$fg[blue][${HOSTNAME} ⊶  $(hostname)] ";;
-          *)
-            ZSH_THEME_NEMO_SETUP="$fg[red][${HOSTNAME} ⊶  $(hostname)] ";;
-          ccige*|ccage*|cc*|cori*|perlmutter*)
-        esac
-        unset HOSTNAME
-      fi
-    fi
-    ZSH_THEME_NEMO_HOSTNAME_SUFFIX="[zsh] "
-    ZSH_THEME_NEMO_HOSTNAME=$fg[blue]
-    ZSH_THEME_NEMO_PATH=$fg[green]
-    ZSH_THEME_NEMO_TIME=$fg[yellow]
-    ZSH_THEME_NEMO_DOLLAR="$fg[red]$"
-  }
-#+END_SRC
 *** Emacs terminal scheme
 #+BEGIN_SRC sh
   function __emacs_terminal_scheme ()
