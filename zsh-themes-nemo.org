@@ -114,7 +114,7 @@ Default theme which color change with respect to the hostname.
     color=${fg_bold[white]}
     b=
     if [[ $(echo $acpi | grep -c '^Battery.*Full') -gt 0 ]] ; then
-      b+=" "
+      b+="  "
     elif [[ $(echo $acpi | grep -c '^Battery.*Discharging') -gt 0 ]] ; then
       local level="$(echo $acpi | cut -f2 -d ',' | tr -cd '[:digit:]')"
       if [ $level -lt 10 ] ; then
